@@ -4,6 +4,18 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 app.use(express.json());
+// 🔒 Clé API pour sécuriser l'accès
+const API_KEY = "ma-super-cle-secrete";
+
+// Middleware pour vérifier la clé API
+app.use((req, res, next) => {
+  const userKey = req.headers['x-api-key'];
+  if (userKey !== API_KEY) {
+    return res.status(403).json({ error: "Clé API invalide" });
+  }
+  next();
+});
+
 
 let products = [];
 let nextProductId = 1;
